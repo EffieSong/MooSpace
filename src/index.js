@@ -6,7 +6,6 @@ import {
   TransformControls
 } from 'three/examples/jsm/controls/TransformControls'
 
-import Stats from 'three/examples/jsm/libs/stats.module.js';
 
 import {
   EffectComposer
@@ -18,8 +17,7 @@ import {
   UnrealBloomPass
 } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
-import Model from './model'
-import CustomMaterial from './ExtendMaterial.js'
+
 import vertex_plane from './shader/vertexShader.glsl'
 import fragment_plane from './shader/fragmentShader.glsl'
 
@@ -51,7 +49,7 @@ function getSentiment() {
 let composer;
 const params = {
   exposure: 1,
-  bloomStrength: 0.,
+  bloomStrength: 0.1,
   bloomThreshold: 0.7,
   bloomRadius: 0.85
 };
@@ -124,59 +122,6 @@ Mesh
 ------------------------------*/
 
 
-// https://github.com/Fyrestar/THREE.extendMaterial
-// let extendShaderMaterial =  THREE.extendMaterial(THREE.MeshStandardMaterial, {
-
-//   material: {
-//     transparent: true
-//   },
-//   // Will be prepended to vertex and fragment code
-//   header: 'varying vec3 vNN; varying vec3 vEye;',
-//   fragmentHeader: 'uniform vec3 fresnelColor;',
-//   // Insert code lines by hinting at a existing
-
-//   vertex: {
-//     // Inserts the line after #include <fog_vertex>
-//     '#include <fog_vertex>': `
-
-//           mat4 LM = modelMatrix;
-//           LM[2][3] = 0.0;
-//           LM[3][0] = 0.0;
-//           LM[3][1] = 0.0;
-//           LM[3][2] = 0.0;
-
-//           vec4 GN = LM * vec4(objectNormal.xyz, 1.0);
-//           vNN = normalize(GN.xyz);
-//           vEye = normalize(GN.xyz-cameraPosition);`
-//   },
-
-//   fragment: {
-//     'gl_FragColor = vec4( outgoingLight, diffuseColor.a );': `
-// gl_FragColor = vec4(gl_FragColor.rgb, 0.2);
-// gl_FragColor.rgba +=  ( 1.0 - -min(dot(vEye, normalize(vNN) ), 0.0) ) * vec4(fresnelColor,0.9)*0.9;
-// `
-//   },
-//   // Uniforms (will be applied to existing or added)
-//   uniforms: {
-//     diffuse: new THREE.Color('white'),
-//     fresnelColor: new THREE.Color('pink')
-//   }
-// });
-
-// let sphereGeometry = new THREE.SphereGeometry(1, 32, 16);
-// let sphereShaderMaterial =  new THREE.ShaderMaterial({
-//   vertexShader: vertex_sphere,
-//   fragmentShader: fragment_sphere,
-//   transparent: true,
-//   uniforms: {
-//       uTime: { value: 0 },
-//       diffuse: { value: new THREE.Color('white')},
-//       fresnelColor: {value: new THREE.Color('yellow')}
-//   }
-// })
-// let mesh = new THREE.Mesh(sphereGeometry, sphereShaderMaterial);
-// scene.add(mesh);
-
 let planeGeometry = new THREE.PlaneGeometry(3, 3);
 let planeShaderMaterial = new THREE.ShaderMaterial({
   vertexShader: vertex_plane,
@@ -202,24 +147,8 @@ let planeShaderMaterial = new THREE.ShaderMaterial({
   }
 })
 
-//const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
 let plane = new THREE.Mesh(planeGeometry, planeShaderMaterial);
 scene.add(plane);
-
-
-// const spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff  } );
-
-// const sprite = new THREE.Sprite( spriteMaterial );
-// scene.add( sprite );
-/*------------------------------
-Models
-------------------------------*/
-// const horse = new Model({
-//   name:'sheep',
-//   file:'./models/sheep2.glb',
-//   scene: scene
-// })
-
 
 /*------------------------------
 Loop
